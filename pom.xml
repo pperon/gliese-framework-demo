@@ -1,0 +1,87 @@
+<project 
+	xmlns="http://maven.apache.org/POM/4.0.0"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	
+  <modelVersion>4.0.0</modelVersion>
+  
+  <groupId>org.glieseframework</groupId>
+  <artifactId>gliese-framework-demo</artifactId>
+  <version>0.1</version>
+  <name>gliese-framework-demo</name>
+  <description>GlieseWorld, a Gliese Framework demo.</description>
+  <inceptionYear>2010</inceptionYear>
+  <url>http://www.glieseframework.org</url>
+  <packaging>jar</packaging>
+  
+  <properties>
+    <sgs-server.version>0.9.12-SNAPSHOT</sgs-server.version>
+    <gliese.version>0.1</gliese.version>
+    <logging.properties>${basedir}/conf/logging.properties</logging.properties>
+    <node.type>singleNode</node.type>
+  </properties>
+  
+  <dependencies>
+  	<dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.projectdarkstar.server</groupId>
+      <artifactId>sgs-server-api</artifactId>
+      <version>${sgs-server.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.projectdarkstar.server</groupId>
+      <artifactId>sgs-server-internal-api</artifactId>
+      <version>${sgs-server.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.glieseframework</groupId>
+        <artifactId>gliese-framework</artifactId>
+        <version>${gliese.version}</version>
+    </dependency>
+  </dependencies>
+  
+  <profiles>
+  	<profile>
+  		<id>run-server</id>
+  			<build>
+  				<plugins>
+  					<plugin>
+  						<groupId>com.projectdarkstar.maven.plugin</groupId>
+            			<artifactId>sgs-maven-plugin</artifactId>
+            			<version>1.0-beta-2-SNAPSHOT</version>
+            			<executions>
+            				<execution>
+            					<id>sgs-run</id>
+				                <phase>pre-integration-test</phase>
+				                <goals>
+				                  <goal>install</goal>
+				                  <goal>configure</goal>
+				                  <goal>deploy</goal>
+				                  <goal>deploy-dependencies</goal>
+				                  <goal>boot</goal>
+				                </goals>
+            				</execution>
+            			</executions>
+            			<configuration>
+            				<version>${sgs-server.version}</version>
+							<sgsHome>
+							  ${project.build.directory}/sgs-server-dist-${sgs-server.version}
+							</sgsHome>
+							<sgsBoot>${basedir}/conf/glieseworld.boot</sgsBoot>
+							<sgsServer>${basedir}/conf/glieseworld.properties</sgsServer>
+							<sgsLogging>${logging.properties}</sgsLogging>
+							<files>
+							  <file>${project.artifact.file}</file>
+							</files>
+            			</configuration>
+  					</plugin>
+  				</plugins>
+  			</build>
+  	</profile>
+  </profiles>
+  
+</project>
